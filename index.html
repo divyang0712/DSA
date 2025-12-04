@@ -1,83 +1,457 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithm Visualizer | Sorting Algorithms</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Structure Visualizer</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        color: #38bdf8;
+    }
+
+    #container {
+        width: 90%;
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: 250px auto;
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    /* Sidebar */
+    #sidebar {
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 12px;
+        height: max-content;
+    }
+
+    #sidebar h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #22d3ee;
+    }
+
+    .topic-btn {
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        border: none;
+        background: #334155;
+        color: white;
+        font-size: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .topic-btn:hover {
+        background: #475569;
+    }
+
+    /* Main UI */
+    #main {
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    #data-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    #speed {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    #buttons {
+        margin-top: 15px;
+    }
+
+    .action-btn {
+        padding: 10px 15px;
+        background: #0ea5e9;
+        border: none;
+        color: white;
+        margin: 5px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .action-btn:hover {
+        background: #0369a1;
+    }
+
+    /* Visualizer box */
+    #visualizer {
+        margin-top: 20px;
+        background: #0f172a;
+        height: 350px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding: 15px;
+        overflow: hidden;
+    }
+
+    .bar {
+        width: 25px;
+        margin: 0 3px;
+        background: #22d3ee;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>Algorithm Visualizer</h1>
-            <p class="subtitle">Interactive Sorting Algorithm Animations</p>
-        </header>
 
-        <main>
-            <section class="controls-section">
-                <div class="input-group">
-                    <label for="arrayInput">Enter Numbers (comma separated):</label>
-                    <input type="text" id="arrayInput" placeholder="e.g., 45, 23, 78, 12, 56, 89, 34">
-                    <button id="generateBtn" class="btn btn-secondary">Generate Random</button>
-                </div>
+<header>💻 Data Structure Visualizer for B.Tech CSE</header>
 
-                <div class="speed-control">
-                    <label for="speedSlider">Animation Speed:</label>
-                    <div class="speed-slider-container">
-                        <span class="speed-label">Slow</span>
-                        <input type="range" id="speedSlider" min="1" max="10" value="5">
-                        <span class="speed-label">Fast</span>
-                    </div>
-                    <span class="speed-value" id="speedValue">5x</span>
-                </div>
-            </section>
+<div id="container">
+    
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <h2>Select Topic</h2>
 
-            <section class="algorithms-section">
-                <div class="algorithm-group">
-                    <h3>Sorting Algorithms</h3>
-                    <div class="button-row">
-                        <button class="btn btn-primary algorithm-btn" data-algorithm="bubble">Bubble Sort</button>
-                        <button class="btn btn-primary algorithm-btn" data-algorithm="selection">Selection Sort</button>
-                        <button class="btn btn-primary algorithm-btn" data-algorithm="quick">Quick Sort</button>
-                        <button class="btn btn-primary algorithm-btn" data-algorithm="merge">Merge Sort</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="visualization-section">
-                <div class="status-bar">
-                    <span id="algorithmName">Select an algorithm to begin</span>
-                    <span id="statusText"></span>
-                </div>
-                <div class="visualization-container" id="visualizationContainer">
-                    <div class="placeholder-text">
-                        <p>Enter numbers or generate a random array to start visualizing</p>
-                    </div>
-                </div>
-                <div class="legend">
-                    <div class="legend-item">
-                        <span class="legend-color default"></span>
-                        <span>Default</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color comparing"></span>
-                        <span>Comparing</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color swapping"></span>
-                        <span>Swapping</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color sorted"></span>
-                        <span>Sorted</span>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-       
+        <button class="topic-btn" onclick="loadTopic('sorting')">Sorting Algorithms</button>
+        <button class="topic-btn" onclick="loadTopic('searching')">Searching Algorithms</button>
+        <button class="topic-btn" onclick="loadTopic('stack')">Stack Operations</button>
+        <button class="topic-btn" onclick="loadTopic('queue')">Queue Operations</button>
+        <button class="topic-btn" onclick="loadTopic('linkedlist')">Linked List</button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- MAIN CONTENT -->
+    <div id="main">
+        <h2 id="topic-title">Select a topic from the left</h2>
+
+        <input
+            type="text"
+            id="data-input"
+            placeholder="Enter numbers like 5,1,4,3 OR value to push/search"
+        />
+
+        <label>Animation Speed</label>
+        <input type="range" id="speed" min="50" max="2000" value="500" />
+
+        <div id="buttons"></div>
+
+        <div id="visualizer"></div>
+    </div>
+</div>
+
+<script>
+// --------------------------------------------------
+// UTILITY FUNCTIONS
+// --------------------------------------------------
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getSpeed() {
+    return document.getElementById("speed").value;
+}
+
+// Render bars for sorting + searching
+function renderBars(arr, highlight = []) {
+    const box = document.getElementById("visualizer");
+    box.innerHTML = "";
+
+    arr.forEach((val, i) => {
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = val * 3 + "px";
+
+        if (highlight.includes(i)) {
+            bar.style.background = "#ff6b6b";
+        }
+
+        box.appendChild(bar);
+    });
+}
+
+// --------------------------------------------------
+// 1️⃣ SORTING ALGORITHMS
+// --------------------------------------------------
+async function bubbleSort() {
+    let arr = getArray();
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
+            renderBars(arr, [j, j + 1]);
+            await sleep(getSpeed());
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+    renderBars(arr);
+}
+
+async function selectionSort() {
+    let arr = getArray();
+    for (let i = 0; i < arr.length; i++) {
+        let min = i;
+        for (let j = i + 1; j < arr.length; j++) {
+            renderBars(arr, [min, j]);
+            await sleep(getSpeed());
+            if (arr[j] < arr[min]) min = j;
+        }
+        [arr[i], arr[min]] = [arr[min], arr[i]];
+    }
+    renderBars(arr);
+}
+
+async function insertionSort() {
+    let arr = getArray();
+    for (let i = 1; i < arr.length; i++) {
+        let key = arr[i], j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            renderBars(arr, [j, j + 1]);
+            await sleep(getSpeed());
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    renderBars(arr);
+}
+
+// --------------------------------------------------
+// 2️⃣ SEARCHING ALGORITHMS
+// --------------------------------------------------
+async function linearSearch() {
+    let arr = getArray();
+    let target = Number(prompt("Enter value to search:"));
+
+    for (let i = 0; i < arr.length; i++) {
+        renderBars(arr, [i]);
+        await sleep(getSpeed());
+        if (arr[i] === target) {
+            alert("Found at index " + i);
+            return;
+        }
+    }
+    alert("Not found");
+}
+
+async function binarySearch() {
+    let arr = getArray().sort((a, b) => a - b);
+    renderBars(arr);
+    let target = Number(prompt("Enter value to search:"));
+
+    let left = 0, right = arr.length - 1;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+
+        renderBars(arr, [mid]);
+        await sleep(getSpeed());
+
+        if (arr[mid] === target) {
+            alert("Found at index " + mid + " (sorted array)");
+            return;
+        } else if (arr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    alert("Not found");
+}
+
+// --------------------------------------------------
+// 3️⃣ STACK
+// --------------------------------------------------
+let stack = [];
+
+function stackPush() {
+    let val = document.getElementById("data-input").value;
+    stack.push(val);
+    showStack();
+}
+
+function stackPop() {
+    stack.pop();
+    showStack();
+}
+
+function showStack() {
+    const box = document.getElementById("visualizer");
+    box.innerHTML = "";
+    stack.forEach(item => {
+        let div = document.createElement("div");
+        div.style.padding = "10px";
+        div.style.margin = "5px";
+        div.style.background = "#22d3ee";
+        div.style.borderRadius = "8px";
+        div.innerText = item;
+        box.appendChild(div);
+    });
+}
+
+// --------------------------------------------------
+// 4️⃣ QUEUE
+// --------------------------------------------------
+let queue = [];
+
+function enqueue() {
+    let val = document.getElementById("data-input").value;
+    queue.push(val);
+    showQueue();
+}
+
+function dequeue() {
+    queue.shift();
+    showQueue();
+}
+
+function showQueue() {
+    const box = document.getElementById("visualizer");
+    box.innerHTML = "";
+    queue.forEach(item => {
+        let div = document.createElement("div");
+        div.style.padding = "10px";
+        div.style.margin = "5px";
+        div.style.background = "#22d3ee";
+        div.style.borderRadius = "8px";
+        div.innerText = item;
+        box.appendChild(div);
+    });
+}
+
+// --------------------------------------------------
+// 5️⃣ LINKED LIST
+// --------------------------------------------------
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.next = null;
+    }
+}
+let head = null;
+
+function llInsert() {
+    let val = document.getElementById("data-input").value;
+    let newNode = new Node(val);
+    newNode.next = head;
+    head = newNode;
+    renderLinkedList();
+}
+
+function llDelete() {
+    let target = document.getElementById("data-input").value;
+
+    let temp = head, prev = null;
+    while (temp != null) {
+        if (temp.value == target) {
+            if (prev == null) head = temp.next;
+            else prev.next = temp.next;
+            break;
+        }
+        prev = temp;
+        temp = temp.next;
+    }
+    renderLinkedList();
+}
+
+function renderLinkedList() {
+    const box = document.getElementById("visualizer");
+    box.innerHTML = "";
+
+    let temp = head;
+    while (temp != null) {
+        let div = document.createElement("div");
+        div.style.padding = "10px";
+        div.style.margin = "5px";
+        div.style.background = "#38bdf8";
+        div.style.borderRadius = "8px";
+        div.innerText = temp.value;
+        box.appendChild(div);
+
+        temp = temp.next;
+    }
+}
+
+// --------------------------------------------------
+// TOPIC LOADER
+// --------------------------------------------------
+function loadTopic(topic) {
+    const title = document.getElementById("topic-title");
+    const buttons = document.getElementById("buttons");
+    buttons.innerHTML = "";
+
+    if (topic === "sorting") {
+        title.innerText = "Sorting Algorithms";
+        buttons.innerHTML = `
+            <button class="action-btn" onclick="bubbleSort()">Bubble Sort</button>
+            <button class="action-btn" onclick="selectionSort()">Selection Sort</button>
+            <button class="action-btn" onclick="insertionSort()">Insertion Sort</button>
+        `;
+    }
+
+    if (topic === "searching") {
+        title.innerText = "Searching Algorithms";
+        buttons.innerHTML = `
+            <button class="action-btn" onclick="linearSearch()">Linear Search</button>
+            <button class="action-btn" onclick="binarySearch()">Binary Search</button>
+        `;
+    }
+
+    if (topic === "stack") {
+        title.innerText = "Stack Operations";
+        buttons.innerHTML = `
+            <button class="action-btn" onclick="stackPush()">Push</button>
+            <button class="action-btn" onclick="stackPop()">Pop</button>
+        `;
+        showStack();
+    }
+
+    if (topic === "queue") {
+        title.innerText = "Queue Operations";
+        buttons.innerHTML = `
+            <button class="action-btn" onclick="enqueue()">Enqueue</button>
+            <button class="action-btn" onclick="dequeue()">Dequeue</button>
+        `;
+        showQueue();
+    }
+
+    if (topic === "linkedlist") {
+        title.innerText = "Linked List Operations";
+        buttons.innerHTML = `
+            <button class="action-btn" onclick="llInsert()">Insert</button>
+            <button class="action-btn" onclick="llDelete()">Delete</button>
+        `;
+        renderLinkedList();
+    }
+}
+
+// Convert input into array
+function getArray() {
+    let raw = document.getElementById("data-input").value;
+    return raw.split(",").map(x => Number(x.trim()));
+}
+
+</script>
 </body>
 </html>
